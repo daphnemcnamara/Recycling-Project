@@ -84,6 +84,8 @@ var bar3 = new ProgressBar.Line("#progress1", {
         document.getElementById("webcam-container").appendChild(webcam.canvas);
         label1Container = document.getElementById("label1-container");
         label2Container = document.getElementById("label2-container");
+        label3Container = document.getElementById("label3-container");
+        label4Container = document.getElementById("label4-container");
     }
 
     async function loop() {
@@ -105,6 +107,14 @@ var bar3 = new ProgressBar.Line("#progress1", {
             else{
                 bar2.animate(prediction[i].probability)
                 label2Container.innerHTML = classPrediction;
+            }
+            else{
+                bar3.animate(prediction[i].probability)
+                label4Container.innerHTML = classPrediction;
+            }
+            else{
+                bar4.animate(prediction[i].probability)
+                label4Container.innerHTML = classPrediction;
             }
         }
     }
