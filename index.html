@@ -3,21 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recycling Categorization with Machine Learning Project</title>
+    <title>Teachable Machine Classification</title>
 </head>
 <body>
-    <h1>Teachable Machine Webcam Demo</h1>
-    <video id="webcam" autoplay playsinline width="640" height="480"></video>
-    <button id="start">Start Predicting</button>
+    <h1>Teachable Machine Webcam Classification</h1>
+    <div id="webcam-container"></div>
     <div id="label-container"></div>
 
-    <!-- Link to TensorFlow.js library -->
+    <!-- TensorFlow.js Library -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <!-- Link to Teachable Machine library -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/knn-classifier"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
-
-    <!-- Link to your script.js file -->
+    <!-- Teachable Machine Image Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image"></script>
+    <!-- Link to Your Script.js File -->
     <script src="script.js"></script>
+
+    <script>
+        // Additional code provided by you
+        document.getElementById('start').addEventListener('click', async () => {
+            const activation = net.infer(webcamElement, 'conv_preds');
+            const result = await classifier.predictClass(activation);
+            const classes = ['Cardboard', 'Glass', 'Plastic', 'Metal']; // Update based on your classes
+            document.getElementById('label-container').innerText = `Prediction: ${classes[result.label]}\nProbability: ${result.confidences[result.label]}`;
+        });
+    </script>
 </body>
 </html>
