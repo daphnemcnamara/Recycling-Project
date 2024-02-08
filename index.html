@@ -1,122 +1,123 @@
-<h3 style="color:blue;">Teachable Machine Image Model</h3>
-<button type="button" class="btn btn-info" onclick="init()">Start</button>
-<style>
-    #progress {
-  margin: 20px;
-  width: 400px;
-  height: 8px;
-  position: relative;
-}
-</style>
-<div class="progress" id="progress1"><div id="label1-container"></div></div>
-<div class="progress" id="progress2"><div id="label2-container"></div></div>
-<div class="progress" id="progress3"><div id="label3-container"></div></div>
-<div class="progress" id="progress4"><div id="label4-container"></div></div>
-<div id="webcam-container"></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/progressbar.js/0.6.1/progressbar.min.js" integrity="sha512-7IoDEsIJGxz/gNyJY/0LRtS45wDSvPFXGPuC7Fo4YueWMNOmWKMAllEqo2Im3pgOjeEwsOoieyliRgdkZnY0ow==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
-<script type="text/javascript">
-let initStatus=false;
-    //progress bar  https://jsfiddle.net/kimmobrunfeldt/k5v2d0rr/
-    var bar1 = new ProgressBar.Line("#progress1", {
-  strokeWidth: 2,
-  color: '#FFEA82',
-  trailColor: '#eee',
-  trailWidth: 1,
-  svgStyle: {width: '100%', height: '100%'},
-});
-var bar2 = new ProgressBar.Line("#progress1", {
-  strokeWidth: 2,
-  color: '#d00eee',
-  trailColor: '#eee',
-  trailWidth: 1,
-  svgStyle: {width: '100%', height: '100%'},
-    });
-var bar3 = new ProgressBar.Line("#progress1", {
-  strokeWidth: 2,
-  color: '#d00eee',
-  trailColor: '#eee',
-  trailWidth: 1,
-  svgStyle: {width: '100%', height: '100%'},
-    });
- var bar4 = new ProgressBar.Line("#progress1", {
-  strokeWidth: 2,
-  color: '#d00eee',
-  trailColor: '#eee',
-  trailWidth: 1,
-  svgStyle: {width: '100%', height: '100%'},
-});
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teachable Machine Tarea 6</title>
 
-
-    // More API functions here:
-    // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
-
-    // Teachable Machine export tarafından sağlanan model bağlantısı
-    const URL = "https://teachablemachine.withgoogle.com/models/juR7Nsj4E/";
-
-    let model, webcam, labelContainer, maxPredictions;
-
-    // Load the image model and setup the webcam
-    async function init() {
-        if(initStatus){
-        return;
-    }
-        initStatus=true;
-        const modelURL = URL + "model.json";
-        const metadataURL = URL + "metadata.json";
-
-        // load the model and metadata
-        // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
-        // or files from your local hard drive
-        // Note: the pose library adds "tmImage" object to your window (window.tmImage)
-        model = await tmImage.load(modelURL, metadataURL);
-        maxPredictions = model.getTotalClasses();
-
-        // Convenience function to setup a webcam
-        const flip = true; // whether to flip the webcam
-        webcam = new tmImage.Webcam(500, 200, flip); // width, height, flip
-        await webcam.setup(); // request access to the webcam
-        await webcam.play();
-        window.requestAnimationFrame(loop);
-
-        // append elements to the DOM
-        document.getElementById("webcam-container").appendChild(webcam.canvas);
-        label1Container = document.getElementById("label1-container");
-        label2Container = document.getElementById("label2-container");
-        label3Container = document.getElementById("label3-container");
-        label4Container = document.getElementById("label4-container");
-    }
-
-    async function loop() {
-        webcam.update(); // update the webcam frame
-        await predict();
-        window.requestAnimationFrame(loop);
-    }
-    // run the webcam image through the image model
-    async function predict() {
-        // predict can take in an image, video or canvas html element
-        const prediction = await model.predict(webcam.canvas);
-        for (let i = 0; i < maxPredictions; i++) {
-            const classPrediction =
-                prediction[i].className + ": " + prediction[i].probability.toFixed(2);
-            if(i<1){
-                bar1.animate(prediction[i].probability)
-                label1Container.innerHTML = classPrediction;
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="fontawesome/css/all.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div>
+        <style>
+            body {
+              background-image: url('img/blackground.jpg');
             }
-            else{
-                bar2.animate(prediction[i].probability)
-                label2Container.innerHTML = classPrediction;
-            }
-            else{
-                bar3.animate(prediction[i].probability)
-                label4Container.innerHTML = classPrediction;
-            }
-            else{
-                bar4.animate(prediction[i].probability)
-                label4Container.innerHTML = classPrediction;
-            }
-        }
-    }
+        </style>
+    
 
-</script>
+        <div class="container">
+            <div class="text-center pb-3">
+                <h1 class=" text-white">Teachable Machine Image Model</h1>
+                <div class="pb-3">
+                    <button type="button" class="btn btn-outline-light" onclick="init()">Start</button>
+                </div>
+                <div class="position-absolute top-50 start-50 translate-middle">
+                    <div class="card" style="width: 18rem;">
+                        <div id="webcam-container"></div>
+                        <div class="card-body">
+                            <h5 class="card-tittle">Testing:</h5>
+                            <div class="pb-3" id="label-container"></div>
+                            <a href="index.html" class="btn btn-dark">Restart</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row text-center">
+                <div class="col d-flex justify-content-center">
+                    <div class="card text-white bg-dark mb-3" style="width: 18rem;">
+                        <img src="img/cont_luz.jpg" class="img-thumbnail" alt="Control_Luz">
+                        <div class="card-body">
+                            <h5 class="card-title">Control_Luz</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                </div>
+                <div class="col d-flex justify-content-center">
+                    <div class="card text-white bg-dark mb-3" style="width: 18rem;">
+                        <img src="img/cont_tele.jpg" class="img-thumbnail" alt="Control_Tele">
+                        <div class="card-body ">
+                            <h5 class="card-title">Control_Tele</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+        <script type="text/javascript">
+            // More API functions here:
+            // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
+    
+            // the link to your model provided by Teachable Machine export panel
+            const URL = "https://teachablemachine.withgoogle.com/models/juR7Nsj4E";
+    
+            let model, webcam, labelContainer, maxPredictions;
+    
+            // Load the image model and setup the webcam
+            async function init() {
+                const modelURL = URL + "model.json";
+                const metadataURL = URL + "metadata.json";
+    
+                // load the model and metadata
+                // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
+                // or files from your local hard drive
+                // Note: the pose library adds "tmImage" object to your window (window.tmImage)
+                model = await tmImage.load(modelURL, metadataURL);
+                maxPredictions = model.getTotalClasses();
+    
+                // Convenience function to setup a webcam
+                const flip = true; // whether to flip the webcam
+                webcam = new tmImage.Webcam(200, 200, flip); // width, height, flip
+                await webcam.setup(); // request access to the webcam
+                await webcam.play();
+                window.requestAnimationFrame(loop);
+    
+                // append elements to the DOM
+                document.getElementById("webcam-container").appendChild(webcam.canvas);
+                labelContainer = document.getElementById("label-container");
+                for (let i = 0; i < maxPredictions; i++) { // and class labels
+                    labelContainer.appendChild(document.createElement("div"));
+                }
+            }
+    
+            async function loop() {
+                webcam.update(); // update the webcam frame
+                await predict();
+                window.requestAnimationFrame(loop);
+            }
+    
+            // run the webcam image through the image model
+            async function predict() {
+                // predict can take in an image, video or canvas html element
+                const prediction = await model.predict(webcam.canvas);
+                for (let i = 0; i < maxPredictions; i++) {
+                    const classPrediction =
+                        prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+                    labelContainer.childNodes[i].innerHTML = classPrediction;
+                }
+            }
+        </script>
+
+    </div>
+    
+</body>
+</html>
