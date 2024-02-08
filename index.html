@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teachable Machine with Camera</title>
+</head>
+<body>
+    <h1>Teachable Machine Webcam Demo</h1>
+    <video id="webcam" autoplay playsinline width="640" height="480"></video>
+    <button id="start">Start Predicting</button>
+    <div id="label-container"></div>
+
+    <!-- Link to TensorFlow.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <!-- Link to Teachable Machine library -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/knn-classifier"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
+
+    <!-- Link to your script.js file -->
+    <script src="script.js"></script>
+</body>
+</html>
