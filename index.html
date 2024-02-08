@@ -1,123 +1,404 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teachable Machine Tarea 6</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link href="fontawesome/css/all.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <!-- Basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">   
+   
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+ 
+     <!-- Site Metas -->
+    <title>BotMinds Studio</title>  
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Site Icons -->
+    <link rel="shortcut icon" href="./chatbot.png" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="css/responsive.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/custom.css">
+	<script src="js/modernizr.js"></script> <!-- Modernizr -->
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
 </head>
-<body>
-    <div>
-        <style>
-            body {
-              background-image: url('img/blackground.jpg');
-            }
-        </style>
-    
+<body id="page-top" class="politics_version">
 
+    <!-- LOADER -->
+    <div id="preloader">
+        <div id="main-ld">
+			<div id="loader"></div>  
+		</div>
+    </div><!-- end loader -->
+    <!-- END LOADER -->
+	
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">
+			<img width="80" height="90" class="img-fluid" src="./download (1).jpg" alt="" />
+		</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fa fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav text-uppercase ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger active" href="#home">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#about">About Us</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#services">Services</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#portfolio">Portfolio</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="./recognize.html">Test Here(Recognize)</a>
+              </li>
+             <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="./audio.html">Test Here(Audio)</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="./pose.html">Test Here(Pose)</a>
+              </li>
+              
+			<li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#contact">Contact Us</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+	
+	<section id="home" class="main-banner parallaxie" style="background: url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHCBISFRERERIREREREQ8RERERDxEPEQ8PGBQZGRgUGBgcIS4lHB4rHxgYJjgmKy8xNzU1GiQ7QDszPy40NTEBDAwMEA8QHhISGjEhISQ0NDQ0NDQ0NDQxMTE2MTQ0MTYxNDQ3MTQ0MTQ9NDQ0MTExMTE1MTE0NDQ0PTY0NDU0Mf/AABEIAKABPAMBIgACEQEDEQH/xAAbAAADAQEBAQEAAAAAAAAAAAABAgMABAUGB//EAEMQAAICAQMBBQQGBwUHBQAAAAECABEDBBIhMQUiQVFhBhNxgTJCUpGSoRSCscHR0vAjYnLh8UNVk6Ky0+IHFRYkM//EABkBAQEBAQEBAAAAAAAAAAAAAAABAgQDBf/EACARAQEAAgICAwEBAAAAAAAAAAABAhEDIRIxIkFRBBP/2gAMAwEAAhEDEQA/APyMAytRlSMwnvI5rknGUQkTCEtEQ1MI4E0idQGVMUiZVOAR6iwCBGqa4LmgbmLRZjMg3FMeIYBEaKI0DRCI8WAvSMAeD4GwD5kVf7RA0WFUELCiQeoJBog8/ESYaa4NHuAmLcLN04AoVxfPqYNGV6INA0QaIsGvAjyiAwXMDBpUGMIMtKaVgwpTuAIFkAkc+R4+UWyOoI6HnjiEPNUXcZgTADCEGBhAUgOrR5HGvMvUKUxGjkxWYQJ4xLSatUf3kBVgMwgmmWmBhqCuZlTrKAQJCxhGIiMZiYDNGykxTHqKZkjRgIBGEBDNMYJpRmAghDTIaoQIm6EPDUEiCoN0zOTZJskkk+ZMDEQ5CGNgsSQCxYAd8/SqvC4pMvocduoahRBIY18onZbqbep2b7MZcy7zkwYEq92fIUFfAKT+U6//AIiv+8Oz/wDian/szq17Eog8CST8anLj7LZn06e+0wOpQurNqAqYQN3GY13D3enqJ65YSTtzYcuWVulH9mA7F37Q7PZj1vJqB9WgeMI6cfdFyexxbccOr0WSrIRc+Qvt/Wxrcjp9Jk2++R8RZcy4lxh92Z3Klg6p9ZeKvzM6s+gy6TUjDkKb0ZNxRiyHcoNA8eBmZJWrnlPx8vqNK+NijqQw4rrfw84q4/pXY239W+94A+U9/tvA7kMi2ce92YGiqgjm/QkTxP0nIA6bjTsC43bt7AmiT48k8yZTV09Mc/LHcS2xz8f9J0avQ5UCPkxsi5FVkZsZRXWhyvAB+U5COnwk0ssqwbiuKsHoL+/5wcSYEZgaJA4FWfInp+yRdkZ5g8VRMYDK1y4QyCcS4z1AU44TjmZ/KI7wKBBNtk1NytQIKYQJNHjgwzZoTFhMM0GSM0CQtAVYGjqJoCVFMpFIgKsaKDCWmQDFhg2woFoIxWAiFCo4SKGj7vQQpQJq9PyhIPlNs/qoDK59PuE6NPrnVg3dNc8jrU5107lWcK2xaDMF7oJ6Anzm9wykbl27lLLu7oZdtgi+oMdpdV93pzj1eMbM2mxuLpMz48J6ci24nDl7C1AYLsxANVMuTGyH13bq8DPmVRNi7Gb3n9qXU7QioFsEG+TVz2fZTt/9HdU1C+90zMCy7gXxN0LofhwR0Inp5frw/wAtbuN09jsjsvLhzY8q5NAzISdh7Q0qsQVIIFNYNHr4T67X9gYAcep1TDH7nGmMacZ0LBwWYBn8bBsULryqfC+yuDGuXVa2t+LSKz4Feu9ldtmEML8L3Ef3Z6Xa/beXQ1gwsDqsoTNq87991yuNwRL4XaG6jkkmJennnju6nse0O0juI0/ZWPLiF998Wofd5026c+l0Gj1mQYTp30GpJ7pVmy6dmAshg3eQetkDynz7+0HaLHcdVqCev/75f4z2OzPa/VI3u9Ux1OBgUcZG3ZBjYUSmQ95TR86k3uteFwx1NLe33aDF20nuygGRcrOz7/etsCqyDoiEc0L6jngTwU0mNVXcgZmAPLtxfwM+r9oOzw2DNiZt76D3eXT5T9LJoMtEA+ilkPpuYT57T6oL7nLjZUyY9rBveEFXVjRHPHQTUhL8ZPX6gcGDaDsG8sRW5tu2ut7ut+FSGq0uMqWVdpWrG5jY+Znq4tdnvH7vIN2J3zYyuVjsyNRdx3upoXPNzuqow3IWYgUHs+PPX0l1+w33NW15KrARG8/4xCJ4ugyCNkxxcYnQUhY47IhPMs6iKFqAyrQjbonvIYHGhnQs5EM6l6RFzjEwiKYyzTFVQTTHpCpEDATVCWiUTAJaTYygAgYwJBZQLFhg2xi7o01D1+7/ADmVKRGCcRiB5n8I/jDS/ab8A/mjbUiHuz5H7pUI32T+EzDZ9t/wD+aPa/bf8A/mikhDhY/Ub8LTfo789x/wGNuH23/D/wCUbd17z/d6/GFeqArlUNjGioEUCwXIXcxBFEkk2T5RcyD3eZL3DHsbETztZmKsF9COa6cXPOx5QBTKWqyCLRh8/Gbc2Q7QCq95j9JiaU2xPUmpvcseHhZffTnOMgnxrcLHQ9eRcZMRJAAP3CdS9ntt3cglXdAaO9Vuxx9FgATXjXwvnxDwrg0eg6j/AFP9CYs09cbLvVfo3/p52PjzaLWFw71lwMcSUrNsVqF88WxPT6s+iOjVM+XKE3ZsuTW5C1I2R/dMAmBCwIQkHcSBZHAn5f2XqHQsqZMmBGx99ULMMrqtgMLHVvuufoXZ+tyalFyYTifLSDPpc4SsmRFCjOm76xUC6INjxB4Tknp5cn8+du59vO9o+1tXhzYUTIcS5caO+LImnZ9OzE2rHZZ4APgaIn0ep0wyXhzYmbH75NOj5FxE6hHDXnxMqAqVoNwSKNGcLaPXE2ezcBY82cFk+t7pT/7SAnULp9DhAId0VRnZPrJjWyQT04r4yTkm1z/nz8Zq+l9R2Qn6JmzsXVl7NTEXLDZlHDLXkw2KL5+kPKfj7vkZQm5tibsiqG4FnaW3c+Qn03bXb2ozZMgxu+PFk2quIbSnu0FKpsc0AP2zwXR/GjQF9xBdk+Q9P65q+e/S48Vwk8nIMrqO6eK5Ba/vN/6yLBuu4+F2wHNG6o9J3vp/o2o5UsDfA5roOv8AXpfITW4bRwwHn5zS7hVVum7/AJ/85F2PQknnzuWysCABZ45tQtNfIFHkdOeJAiZaqmKUdvCRxzpVYIkyyJszoytJpAkykQjJLNIbIHKnWdKmQRZUmojWXZwI4kw1wqJp52HczKsLiKsCpg5huC4AqAwzFYZIZhCRMphoQsIEBMyzKs8x6QNGEKjXMrtk7lbirA2w1BcJ/rrCkZfSbA+1gasUQR0tSKIvwhNeQ/OZdtGwtiqB3233dPnG01t2arVI67VGUkClLFQEH6v0uOPD4eUNPYPQHgjldw5FX8fWKhX7KfiyfxnTjK/Zx/iyfxmM8tt8WOvTs0GM30PII+jfBn2nsp2cG1GEMp27lsbaDLfM+Z7H065HRLxjcwshshpepPPkATP03sDLiVk2JiVEI20CcnHiWPJM4ssvlO31OPDeF6+na3ZGXJedsjrkslAAaUA8AeQ/rmeT7V9mJkKOSwzPjV27qe7L7ebHmT49LM+/UY9nDAKfWfHe0uVXbulaQBRbAGhLyXxx9+2eGeWXr0/LO0ECs1KeLFOo7o6cjznjah2/Kjx4eU+u7ewhwXBTctBiGHeXpZ9Rx9/pPlxgbIy4kCM+R0ReQe8TQ58Bzz8Jvhy28v6MNVLTaXNlVvdY3ylbDDFhyOUWuCSooA8+PhOUIwVgQQQ6Agggg03FT67X6lV2aXCxGm0/Ao177IPp5mA6sTfwFCfJ6jUF2dyT33VrJs1TV+U6sct3Ti5MPGS/qLAxSpjb5t008mwKbnWyzlXJUuuS4WJusXCZXOvE58IhVHcSe+UCCDYIRzq3Ek7QqeIhkrcnbpxSyCQwzpSajzy9lYxYYSJUYRwIimG4ZGBmguCAJoYIaNCIscCSkI0IEzGAvI1CVzKyNyoirGJmLRTMTIoNFLE1fgKHoJiYBAdRKqZANDumco1jX0/s4j7myBWKIjgvtOxXZSoBboDRPHpPouzNeV+sZ4fZepP6NtBIREJIHQ5XyC2PrS18FEpo8k4uXHb6nBn4x+gL23wUJO0gXXw6ieBrNYQ+RHpiyWp55Fghh8r/ADnj5tU4UZNr7GZlV6IVmU0QCetGU0mpxuA2dmC4ySuwXkyWKOMehvr4fOeWOFt1XteTGTcc2bKCSD0a1PwPBnL2Ug0y5NQ6hszHJi04YWEq1fNXnyVHl3vSuvUaFMX9pnZkLd5NKpD5tvhvbog+IJ9BPNz6hsjbm4AAVVF7UQdALnRhPGOTkymd25dZkONG+03dHz/ozx1Xj5j986u0tSHbaL7hodKPXd8+n5zm3Tp48dRw82XlSMsRWjsZNhPR5RZBLhJzYDzOxjAllehOVWlcxk1WFOCZqMKCodwhHKBAVgDTXDeqqk6VbicYaPuMsZyxX3TbpEMYblY8TiNJXCDBYpDJzQaPMYhM0GlN0waSuEGAxWAiAmCFaPuk5iDMrDExSYIIUwmuLNcKxMUtMTPrPZvsvFhxjtDVqMi7q0umYd3OQQGzOPFFPAHiQfAcyrjCKgw6bDiJJyZm/Scgv6CMAMafHbbH/HK6YklVHViqj4k1ODV6ps2R8jcs7FjxQ+Q8BOjDkKkEfVII+I5E5s+668Oo/SO0PYXPkKtk1eLHixoqJjVHZceNR0WyK+NT5PX6jS6ZyukDvkQ7RnyMCqH7SJX0v7x+QEv237Z5dUjIA+O+6wR+4/mSKv5XPnVXzi3GejGZfdNy5LMSSSSSTZJPiTPO7R1gX+zQ976zfZ9PjN2lrincTr9Yj6vp8Z45uaww33WOXl+odTG3SIh5nQ5dK7ohMTmKTBMVsTcy7ZJxrKgwWGcwLBtMEIqrQGogUxaMCEIixlmY9aoix2hxiK80897p1WU2xFbiG5pig0yiErDCttmqC4whC1MRGhYiE2mFlQkmDKqZKpCICsYGZpFKBGYRLjqIWE2QFJaYw0htgKStT0ewOx31mZcKsEWt+XKwtcWMHlvU80B4kyGkuwOzUz5D71iunxL7zOwNMVugi/3mPHoLPhPT7c7ROdxtG3HjUJiQfRx4l4VR6ACfQ+1+PS6XHh0WjWkUb8rtzkz5a4Z2+tx0HQc1U+MUczzyyeuEdOmSdTJYiadalgeJz29uiI48NdfjJ6vVDGOOWP0R+8+kOt1QxjzbwHn/AJTxiSxLMbJnrhhvuvPPPXU9g63ZPJJsnzMmwlMgkxOiOW0FmM1zFoQpiMY5iQ1Bxy6YiZPD1nekJfaYSRdaM7AJz5UNwGxkQlRNjSZ15hHlmZYIV6zEe1dSSOZuZYmhOZjN154zvamNpdZzY50LLGcocwGGBpWRUCYxVjQBc0NTVAEosjKqeIIywO0CiFhMqmvMuqxEWUAhYFTNGqK0Kk7T6L2Wz7MeQL9N8yKxHUoq2B97NPBw6XJlO3FjfI3iERnI9TQ4Hxn03s/2dkwrl96Fxu74tobIm4ILLGgSR4TOV1GsZ25e1M7ZHJYkgWoBN0L6TjRZ6+Xs8/bQ35bz+6STsd253qv6pb94nNlnP10446iCGpDV6sY/Vj0H7z6T3tP2Ev1sjn/CFX+M+f8AaXQrh1G1N21kRxuN88g/sjj1lkmeVxnTysjljuY2T4xkmcQ451xy29tkkROjKOJzboStBUNzAwibRCY7mKYbi2nYXO2552A8zt3Ql6qyGRzHmUxyefrB9KYzM/WbEYzjmB4sdBzK+7EdVWSYtXKEc8SaidDkRARKzL0ISoVg3Qb5pO6rMYgYzFoZ0YCMBJ7owaDRzBtMAMO4wEqV3VJFprgVAuEiKGoRGeZVZBHqQRpTdCymMRjcR3hSDb7nskv/AO34gDsX3mawON/ePePn1r5TnxJzOns3Ju0iIP8AZqjD4NYb8xObAe9Obnu49uKarpCSmMRajLOKOp24TPnPbjHT6d/tI6n9Ugj/AKjPoMJnl+22O8OF/sZSp+DKf5ROjgvyePL6fHOJsawP0gxGdzlquTpOdVErk6TlVuYPahqFSJz5W5iho2vis9SZAis0XdG2pjVsIFzqLTgxtzOm7ERnKduhMkGbmQxdZTOYRbFHsTnwtxHJhX//2Q==)">
+		<div class="heading">
+			<h1>Hello, I am ChatBot Developer.</h1>
+			<p>Explore the intersection of artificial intelligence and conversation with our chatbot developer,  <br>dedicated to bridging the gap between technology and human interaction.</p>
+			<h3 class="cd-headline clip is-full-width">
+				<span>My Professional Services include </span>
+				<span class="cd-words-wrapper">
+					<b class="is-visible">Web Development</b>
+					<b>ChatBot Development</b>
+					<b>Creative Design</b>
+					<b>Graphic Design</b>
+				</span>
+			</h3>
+		</div>
+	</section>
+
+	<svg id="clouds" class="hidden-xs" xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100" viewBox="0 0 85 100" preserveAspectRatio="none">
+        <path d="M-5 100 Q 0 20 5 100 Z
+            M0 100 Q 5 0 10 100
+            M5 100 Q 10 30 15 100
+            M10 100 Q 15 10 20 100
+            M15 100 Q 20 30 25 100
+            M20 100 Q 25 -10 30 100
+            M25 100 Q 30 10 35 100
+            M30 100 Q 35 30 40 100
+            M35 100 Q 40 10 45 100
+            M40 100 Q 45 50 50 100
+            M45 100 Q 50 20 55 100
+            M50 100 Q 55 40 60 100
+            M55 100 Q 60 60 65 100
+            M60 100 Q 65 50 70 100
+            M65 100 Q 70 20 75 100
+            M70 100 Q 75 45 80 100
+            M75 100 Q 80 30 85 100
+            M80 100 Q 85 20 90 100
+            M85 100 Q 90 50 95 100
+            M90 100 Q 95 25 100 100
+            M95 100 Q 100 15 105 100 Z">
+        </path>
+    </svg>
+
+    <div id="about" class="section wb">
         <div class="container">
-            <div class="text-center pb-3">
-                <h1 class=" text-white">Teachable Machine Image Model</h1>
-                <div class="pb-3">
-                    <button type="button" class="btn btn-outline-light" onclick="init()">Start</button>
-                </div>
-                <div class="position-absolute top-50 start-50 translate-middle">
-                    <div class="card" style="width: 18rem;">
-                        <div id="webcam-container"></div>
-                        <div class="card-body">
-                            <h5 class="card-tittle">Testing:</h5>
-                            <div class="pb-3" id="label-container"></div>
-                            <a href="index.html" class="btn btn-dark">Restart</a>
-                        </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="message-box">                        
+                        <h2><b><u>About Me.</u></b></h2>
+                        <p> As a dedicated chatbot developer, I take pride in being a catalyst for seamless and intelligent communication between technology and users. With a passion for innovation and a knack for understanding the nuances of human language, I specialize in architecting virtual assistants and dialogue systems that elevate digital interactions.
+
+                            My journey involves navigating the intricate landscape of natural language processing, where I blend coding expertise with creative flair to construct chat systems that go beyond mere lines of code. I am committed to pioneering conversational AI solutions that not only answer queries but also adapt, learn, and engage users in meaningful ways.
+                            
+                             </p>
+						<p>In my role as a dialogue architect, I continuously push the boundaries of what's possible in the realm of conversational experiences. I strive to create chatbots that not only meet functional requirements but also prioritize user satisfaction and deliver personalized, efficient solutions.</p>
+
+                        <a href="./NewResume-Not-IncludedPersonal-Assi3.pdf" class="sim-btn btn-hover-new" data-text="Download CV"><span>Download CV</span></a>
+                    </div><!-- end messagebox -->
+                </div><!-- end col -->
+
+                <div class="col-md-6">
+                    <div class="right-box-pro wow fadeIn">
+                        <img src="./0e5a50e5-ca68-4d1f-858a-6016dd5e28ab (1).jpg" alt="" class="img-fluid img-rounded">
+                    </div><!-- end media -->
+                </div><!-- end col -->
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </div><!-- end section -->
+	
+    <div id="services" class="section lb">
+        <div class="container">
+            <div class="section-title text-left">
+                <h3>Services</h3>
+                <p>Empowering businesses with intelligent conversation, my services as a chatbot developer seamlessly blend cutting-edge technology and creative expertise to craft personalized and efficient solutions that elevate user interactions to new heights."
+
+
+
+
+
+
+                </p>
+            </div><!-- end title -->
+
+            <div class="row">
+				<div class="col-md-4">
+                    <div class="services-inner-box">
+						<div class="ser-icon">
+							<i class="flaticon-seo"></i>
+						</div>
+						<h2><b>Web Development</b></h2>
+						<p>Transforming visions into immersive digital experiences, our web development services combine innovation and precision to build responsive and user-centric websites that leave a lasting impression.</p>
+					</div>
+                </div><!-- end col -->
+                <div class="col-md-4">
+                    <div class="services-inner-box">
+						<div class="ser-icon">
+							<i class="flaticon-development"></i>
+						</div>
+						<h2><b>Responsive Design</b></h2>
+						<p>Embracing the future of web experiences, our responsive design solutions ensure seamless adaptability across devices, delivering a visually stunning and user-friendly interface that engages audiences on every screen size.</p>
+					</div>
+                </div><!-- end col -->
+				<div class="col-md-4">
+                    <div class="services-inner-box">
+						<div class="ser-icon">
+							<i class="flaticon-process"></i>
+						</div>
+						<h2>Creative Design</h2>
+						<p>Unlocking the power of imagination, our creative design services redefine visual aesthetics. We craft compelling and innovative designs that captivate audiences, transforming concepts into visually stunning and memorable experiences."
+
+
+
+
+
+
+                        </p>
+					</div>
+                </div><!-- end col -->
+				<div class="col-md-4">
+                    <div class="services-inner-box">
+						<div class="ser-icon">
+							<i class="flaticon-discuss-issue"></i>
+						</div>
+						<h2>Support</h2>
+						<p>Committed to your success, our support services go beyond technical assistance. We provide a dedicated and responsive support system, ensuring a seamless experience and addressing your needs promptly to empower you in achieving your goals.</p>
+					</div>
+                </div><!-- end col -->
+				<div class="col-md-4">
+                    <div class="services-inner-box">
+						<div class="ser-icon">
+							<i class="flaticon-idea"></i>
+						</div>
+						<h2>Web Idea</h2>
+						<p>Transform your web ideas into digital reality with our expertise. We specialize in conceptualizing and bringing to life innovative web ideas, ensuring they not only meet your vision but also exceed expectations in functionality, aesthetics, and user engagement</p>
+					</div>
+                </div><!-- end col -->
+				<div class="col-md-4">
+                    <div class="services-inner-box">
+						<div class="ser-icon">
+							<i class="flaticon-idea-1"></i>
+						</div>
+						<h2>Graphic Design</h2>
+						<p>Elevate your brand presence with our graphic design expertise. We translate concepts into visually compelling narratives, crafting distinctive and impactful designs that leave a lasting impression and communicate your message with creativity and precision."
+
+
+
+
+
+
+                        </p>
+					</div>
+                </div><!-- end col -->
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </div><!-- end section -->
+	
+	<div id="portfolio" class="section lb">
+		<div class="container">
+			<div class="section-title text-left">
+                <h3>Portfolio</h3>
+                <p>"Explore my portfolio, a showcase of passion and proficiency. From innovative web designs to captivating graphics, each project is a testament to my commitment to excellence. Dive into my diverse portfolio and witness the artistry and functionality that defines my work.</p>
+            </div><!-- end title -->
+			
+			<div class="gallery-menu row">
+				<div class="col-md-12">
+					<div class="button-group filter-button-group text-left">
+						<button class="active" data-filter="*">All</button>
+						<button data-filter=".gal_a">Web Development</button>
+						<button data-filter=".gal_b">Creative Design</button>
+						<button data-filter=".gal_c">Graphic Design</button>
+					</div>
+				</div>
+			</div>
+			
+			<div class="gallery-list row">
+				<div class="col-md-4 col-sm-6 gallery-grid gal_a gal_b">
+					<div class="gallery-single fix">
+						<img src="uploads/gallery_img-01.jpg" class="img-fluid" alt="Image">
+						<div class="img-overlay">
+							<a href="uploads/gallery_img-01.jpg" data-rel="prettyPhoto[gal]" class="hoverbutton global-radius"><i class="fa fa-picture-o"></i></a>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-md-4 col-sm-6 gallery-grid gal_c gal_b">
+					<div class="gallery-single fix">
+						<img src="uploads/gallery_img-02.jpg" class="img-fluid" alt="Image">
+						<div class="img-overlay">
+							<a href="uploads/gallery_img-02.jpg" data-rel="prettyPhoto[gal]" class="hoverbutton global-radius"><i class="fa fa-picture-o"></i></a>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-md-4 col-sm-6 gallery-grid gal_a gal_c">
+					<div class="gallery-single fix">
+						<img src="uploads/gallery_img-03.jpg" class="img-fluid" alt="Image">
+						<div class="img-overlay">
+							<a href="uploads/gallery_img-03.jpg" data-rel="prettyPhoto[gal]" class="hoverbutton global-radius"><i class="fa fa-picture-o"></i></a>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-md-4 col-sm-6 gallery-grid gal_b gal_a">
+					<div class="gallery-single fix">
+						<img src="uploads/gallery_img-04.jpg" class="img-fluid" alt="Image">
+						<div class="img-overlay">
+							<a href="uploads/gallery_img-04.jpg" data-rel="prettyPhoto[gal]" class="hoverbutton global-radius"><i class="fa fa-picture-o"></i></a>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-md-4 col-sm-6 gallery-grid gal_a gal_c">
+					<div class="gallery-single fix">
+						<img src="uploads/gallery_img-05.jpg" class="img-fluid" alt="Image">
+						<div class="img-overlay">
+							<a href="uploads/gallery_img-05.jpg" data-rel="prettyPhoto[gal]" class="hoverbutton global-radius"><i class="fa fa-picture-o"></i></a>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-md-4 col-sm-6 gallery-grid gal_c gal_a">
+					<div class="gallery-single fix">
+						<img src="uploads/gallery_img-06.jpg" class="img-fluid" alt="Image">
+						<div class="img-overlay">
+							<a href="uploads/gallery_img-06.jpg" data-rel="prettyPhoto[gal]" class="hoverbutton global-radius"><i class="fa fa-picture-o"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+	</div>
+	
+			
+
+    <div id="contact" class="section db">
+        <div class="container">
+            <div class="section-title text-left">
+                <h3>Contact</h3>
+                <p>"Get in touch effortlessly. Our contact page is your gateway to seamless communication. Whether you have questions, inquiries, or collaboration ideas, reach out to us easily and expect a swift and personalized response. We look forward to hearing from you!"</p>
+            </div><!-- end title -->
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="contact_form">
+                        <div id="message"></div>
+                        <form id="contactForm" name="sentMessage" novalidate="novalidate">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<input class="form-control" id="name" type="text" placeholder="Your Name" required="required" data-validation-required-message="Please enter your name.">
+										<p class="help-block text-danger"></p>
+									</div>
+									<div class="form-group">
+										<input class="form-control" id="email" type="email" placeholder="Your Email" required="required" data-validation-required-message="Please enter your email address.">
+										<p class="help-block text-danger"></p>
+									</div>
+									<div class="form-group">
+										<input class="form-control" id="phone" type="tel" placeholder="Your Phone" required="required" data-validation-required-message="Please enter your phone number.">
+										<p class="help-block text-danger"></p>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<textarea class="form-control" id="message" placeholder="Your Message" required="required" data-validation-required-message="Please enter a message."></textarea>
+										<p class="help-block text-danger"></p>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+								<div class="col-lg-12 text-center">
+									<div id="success"></div>
+									<button id="sendMessageButton" class="sim-btn btn-hover-new" data-text="Send Message" type="submit">Send Message</button>
+								</div>
+							</div>
+						</form>
                     </div>
+                </div><!-- end col -->
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </div><!-- end section -->
+
+    <div class="copyrights">
+        <div class="container">
+            <div class="footer-distributed">
+                <div class="footer-left">
+                    <p class="footer-links">
+                        <a href="#">Home</a>
+                      
+                        <a href="#">About</a>
+                    
+                        <a href="#">Contact</a>
+                    </p>
+                    <p class="footer-company-name">All Rights Reserved. &copy;2024
+                        <a href="#">ChatBot Developer</a> Design By : 
+					<a href="https://html.design/">Html Design</a></p>
                 </div>
             </div>
-        </div>
+        </div><!-- end container -->
+    </div><!-- end copyrights -->
 
-        <div class="container">
-            <div class="row text-center">
-                <div class="col d-flex justify-content-center">
-                    <div class="card text-white bg-dark mb-3" style="width: 18rem;">
-                        <img src="img/cont_luz.jpg" class="img-thumbnail" alt="Control_Luz">
-                        <div class="card-body">
-                            <h5 class="card-title">Control_Luz</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                </div>
-                <div class="col d-flex justify-content-center">
-                    <div class="card text-white bg-dark mb-3" style="width: 18rem;">
-                        <img src="img/cont_tele.jpg" class="img-thumbnail" alt="Control_Tele">
-                        <div class="card-body ">
-                            <h5 class="card-title">Control_Tele</h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-            
-        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
-        <script type="text/javascript">
-            // More API functions here:
-            // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
-    
-            // the link to your model provided by Teachable Machine export panel
-            const URL = "https://teachablemachine.withgoogle.com/models/juR7Nsj4E";
-    
-            let model, webcam, labelContainer, maxPredictions;
-    
-            // Load the image model and setup the webcam
-            async function init() {
-                const modelURL = URL + "model.json";
-                const metadataURL = URL + "metadata.json";
-    
-                // load the model and metadata
-                // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
-                // or files from your local hard drive
-                // Note: the pose library adds "tmImage" object to your window (window.tmImage)
-                model = await tmImage.load(modelURL, metadataURL);
-                maxPredictions = model.getTotalClasses();
-    
-                // Convenience function to setup a webcam
-                const flip = true; // whether to flip the webcam
-                webcam = new tmImage.Webcam(200, 200, flip); // width, height, flip
-                await webcam.setup(); // request access to the webcam
-                await webcam.play();
-                window.requestAnimationFrame(loop);
-    
-                // append elements to the DOM
-                document.getElementById("webcam-container").appendChild(webcam.canvas);
-                labelContainer = document.getElementById("label-container");
-                for (let i = 0; i < maxPredictions; i++) { // and class labels
-                    labelContainer.appendChild(document.createElement("div"));
-                }
-            }
-    
-            async function loop() {
-                webcam.update(); // update the webcam frame
-                await predict();
-                window.requestAnimationFrame(loop);
-            }
-    
-            // run the webcam image through the image model
-            async function predict() {
-                // predict can take in an image, video or canvas html element
-                const prediction = await model.predict(webcam.canvas);
-                for (let i = 0; i < maxPredictions; i++) {
-                    const classPrediction =
-                        prediction[i].className + ": " + prediction[i].probability.toFixed(2);
-                    labelContainer.childNodes[i].innerHTML = classPrediction;
-                }
-            }
-        </script>
+    <a href="#" id="scroll-to-top" class="dmtop global-radius"><i class="fa fa-angle-up"></i></a>
 
-    </div>
-    
+    <!-- ALL JS FILES -->
+    <script src="js/all.js"></script>
+	<!-- Camera Slider -->
+	<script src="js/jquery.mobile.customized.min.js"></script>
+	<script src="js/jquery.easing.1.3.js"></script> 
+	<script src="js/parallaxie.js"></script>
+	<script src="js/headline.js"></script>
+	<!-- Contact form JavaScript -->
+    <script src="js/jqBootstrapValidation.js"></script>
+    <script src="js/contact_me.js"></script>
+    <!-- ALL PLUGINS -->
+    <script src="js/custom.js"></script>
+    <script src="js/jquery.vide.js"></script>
+
 </body>
 </html>
