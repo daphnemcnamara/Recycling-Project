@@ -1,59 +1,80 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Image Categorization with TensorFlow.js</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image"></script>
-</head>
-<body>
-  <h1>Real-Time Image Categorization</h1>
-  <div id="webcam-container"></div>
-  <p id="prediction"></p>
+<div>Teachable Machine Image Model</div>
+<button type='button' onclick='init()'>Start</button>
+<div id='webcam-container'></div>
+<div id='label-container'></div>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.3/dist/teachablemachine-image.min.js"></script>
+<script type="text/javascript">
+    // More API functions here:
+    // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
 
-  <script type="text/javascript">
-    const webcamElement = document.getElementById('webcam-container');
-    const predictionElement = document.getElementById('prediction');
+    // the link to your model provided by Teachable Machine export panel
+    const URL = '{{URL}}';
 
-    async function app() {
-      console.log('Loading model..');
+    let model, webcam, labelContainer, maxPredictions;
 
-      // URL to your model.json and metadata.json files
-      const modelURL = 'https://teachablemachine.withgoogle.com/models/-8plkUnZl/model.json';
-      const metadataURL = 'https://teachablemachine.withgoogle.com/models/-8plkUnZl/metadata.json';
+    let isIos = false; 
+    // fix when running demo in ios, video will be frozen;
+    if (window.navigator.userAgent.indexOf('iPhone') > -1 || window.navigator.userAgent.indexOf('iPad') > -1) {
+      isIos = true;
+    }
+    // Load the image model and setup the webcam
+    async function init() {
+        const modelURL = https://teachablemachine.withgoogle.com/models/-8plkUnZl/model.json;
+        const metadataURL =https://teachablemachine.withgoogle.com/models/-8plkUnZl/metadata.json;
 
-      const model = await tmImage.load(modelURL, metadataURL);
-      console.log('Model loaded successfully');
+        // load the model and metadata
+        // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
+        // or files from your local hard drive
+        model = await tmImage.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
 
-      // Initialize the webcam
-      const webcam = new tmImage.Webcam(640, 480, true); // width, height, flip
-      await webcam.setup(); // request access to the webcam
-      await webcam.play();
-      window.requestAnimationFrame(loop);
+        // Convenience function to setup a webcam
+        const flip = true; // whether to flip the webcam
+        const width = 200;
+        const height = 200;
+        webcam = new tmImage.Webcam(width, height, flip);
+        await webcam.setup(); // request access to the webcam
 
-      // Append the webcam element to the DOM
-      document.getElementById('webcam-container').appendChild(webcam.canvas);
+        if (isIos) {
+            document.getElementById('webcam-container').appendChild(webcam.webcam); // webcam object needs to be added in any case to make this work on iOS
+            // grab video-object in any way you want and set the attributes
+            const webCamVideo = document.getElementsByTagName('video')[0];
+            webCamVideo.setAttribute("playsinline", true); // written with "setAttribute" bc. iOS buggs otherwise
+            webCamVideo.muted = "true";
+            webCamVideo.style.width = width + 'px';
+            webCamVideo.style.height = height + 'px';
+        } else {
+            document.getElementById("webcam-container").appendChild(webcam.canvas);
+        }
+        // append elements to the DOM
+        labelContainer = document.getElementById('label-container');
+        for (let i = 0; i < maxPredictions; i++) { // and class labels
+            labelContainer.appendChild(document.createElement('div'));
+        }
+        webcam.play();
+        window.requestAnimationFrame(loop);
+    }
 
-      async function loop() {
+    async function loop() {
         webcam.update(); // update the webcam frame
         await predict();
         window.requestAnimationFrame(loop);
-      }
-
-      async function predict() {
-        // Predict the classification from webcam
-        const prediction = await model.predict(webcam.canvas);
-        
-        predictionElement.innerHTML = `Predictions:<br>
-        Karton: ${prediction[0].probability.toFixed(6)}<br>
-        Glas: ${prediction[1].probability.toFixed(6)}<br>
-        Papier: ${prediction[2].probability.toFixed(6)}<br>
-        Metall: ${prediction[3].probability.toFixed(6)}<br>
-        Plastik: ${prediction[4].probability.toFixed(6)}<br>
-        Sondere: ${prediction[5].probability.toFixed(6)}`;
-      }
     }
 
-    app();
-  </script>
-</body>
-</html>
+    // run the webcam image through the image model
+    async function predict() {
+        // predict can take in an image, video or canvas html element
+        let prediction;
+        if (isIos) {
+            prediction = await model.predict(webcam.webcam);
+        } else {
+            prediction = await model.predict(webcam.canvas);
+        }
+        for (let i = 0; i < maxPredictions; i++) {
+            const classPrediction =
+                prediction[i].className + ': ' + prediction[i].probability.toFixed(2);
+            labelContainer.childNodes[i].innerHTML = classPrediction;
+        }
+    }
+</script>
