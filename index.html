@@ -12,45 +12,19 @@
   <p id="prediction"></p>
 
   <script type="text/javascript">
-    const webcamElement = document.getElementById('webcam');
-    const predictionElement = document.getElementById('prediction');
+    // This script is for testing the webcam functionality
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        const video = document.getElementById('webcam');
+        video.srcObject = stream;
+        return video.play();
+      })
+      .catch(err => {
+        console.error('Error accessing the webcam:', err);
+      });
 
-    async function app() {
-      console.log('Loading model..');
-
-      // Replace these URLs with the actual URLs from your Teachable Machine export
-      const modelURL = 'https://teachablemachine.withgoogle.com/models/-8plkUnZl/model.json';
-      const metadataURL = 'https://teachablemachine.withgoogle.com/models/-8plkUnZl/metadata.json';
-
-      // Load the model and metadata
-      const model = await tmImage.load(modelURL, metadataURL);
-      console.log('Model loaded successfully');
-
-      // Setup the webcam
-      const flip = true; // whether to flip the webcam
-      const webcam = new tmImage.Webcam(640, 480, flip);
-      await webcam.setup(); // request access to the webcam
-      document.getElementById('webcam-container').appendChild(webcam.canvas);
-      await webcam.play();
-      window.requestAnimationFrame(loop);
-
-      async function loop() {
-        webcam.update(); // update the webcam frame
-        await predict();
-        window.requestAnimationFrame(loop);
-      }
-
-      // Make a prediction
-      async function predict() {
-        // Predict the image from webcam
-        const prediction = await model.predict(webcam.canvas);
-
-        // Display the prediction for the top category
-        predictionElement.innerText = `Prediction: ${prediction[0].className}\nProbability: ${Math.round(prediction[0].probability * 100)}%`;
-      }
-    }
-
-    app();
+    // Additional application-specific JavaScript would go here.
+    // For example, TensorFlow.js model loading and prediction logic.
   </script>
 </body>
 </html>
