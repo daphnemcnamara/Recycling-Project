@@ -1,31 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Teachable Machine Model</title>
+  <title>Image Categorization with TensorFlow.js</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image"></script>
 </head>
 <body>
-    <h1>My Teachable Machine Model</h1>
-    <p>This model can recognize the following categories:</p>
-    <ul>
-        <li>Karton </li>
-        <li>Glas </li>
-        <li>Papier </li>
-        <li>Metall </li>
-        <li>Plastik </li>
-        <li>Sondermüll </li>
-    </ul>
+  <h1>Real-Time Image Categorization</h1>
+  <video id="webcam" autoplay playsinline width="640" height="480"></video>
+  <p id="prediction"></p>
 
-    <h2>Model Demonstration</h2>
-    <iframe width="500" height="500"
-       // Replace these URLs with the actual URLs from your Teachable Machine export
-      const modelURL = 'https://teachablemachine.withgoogle.com/models/YOUR_MODEL_ID/model.json';
-      const metadataURL = 'https://teachablemachine.withgoogle.com/models/YOUR_MODEL_ID/metadata.json';
+  <script type="text/javascript">
+    const webcamElement = document.getElementById('webcam');
+    const predictionElement = document.getElementById('prediction');
+
+    async function app() {
+      console.log('Loading model..');
+
+      // Replace these URLs with the actual URLs from your Teachable Machine export
+      const modelURL = 'https://teachablemachine.withgoogle.com/models/-8plkUnZl/model.json';
+      const metadataURL = 'https://teachablemachine.withgoogle.com/models/-8plkUnZl/metadata.json';
 
       // Load the model and metadata
       const model = await tmImage.load(modelURL, metadataURL);
       console.log('Model loaded successfully');
-    </iframe>
 
-    <p>View the model on <a href="https://teachablemachine.withgoogle.com/models/-8plkUnZl/">Teachable Machine</a>.</p>
+      // Setup the webcam
+      const flip = true; // flip the webcam for correct orientation
+      const webcam = new tmImage.Webcam(640, 480, flip);
+      await webcam.setup(); // request access to the webcam
+      await webcam.play();
+      document.body.appendChild(webcam.canvas);
+
+      // Loop and predict
+      async function loop() {
+        webcam.update(); // update the frame from the webcam
+        await predict();
+        requestAnimationFrame(loop); // keep looping
+      }
+
+      // Make a prediction
+      async function predict() {
+        // Predict the current frame.
+        const prediction = await model.predict(webcam.canvas);
+        predictionElement.innerText = `Prediction: ${prediction[0].className} - Probability: ${prediction[0].probability.toFixed(2)}`;
+      }
+
+      loop(); // start the loop function
+    }
+
+    app(); // run the app function
+  </script>
 </body>
 </html>
