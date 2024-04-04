@@ -1,8 +1,19 @@
-body{
-    background-color: aqua;
-    text-align: center;
-    text-size-adjust: ;
-    font-size:20px ;
-    font-style: italic;
-    font-display: 5px;
+.btn-default-heading{
+    font-size:30px;
+}
+body {
+background:linear-gradient(turquoise 0%,violet 50%,purple 100%)    
+}
+b{
+    color:grey;
+}
+#webcam{
+    width:425px;
+    height:aspx;
+    border:5px grey;
+    border-style:inset;
+
+}
+#object_name, #accuracy_count{
+    color:white;
 }
