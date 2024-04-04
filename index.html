@@ -17,7 +17,13 @@
 
     <h2>Model Demonstration</h2>
     <iframe width="500" height="500"
-        src="https://teachablemachine.withgoogle.com/models/-8plkUnZl/">
+       // Replace these URLs with the actual URLs from your Teachable Machine export
+      const modelURL = 'https://teachablemachine.withgoogle.com/models/YOUR_MODEL_ID/model.json';
+      const metadataURL = 'https://teachablemachine.withgoogle.com/models/YOUR_MODEL_ID/metadata.json';
+
+      // Load the model and metadata
+      const model = await tmImage.load(modelURL, metadataURL);
+      console.log('Model loaded successfully');
     </iframe>
 
     <p>View the model on <a href="https://teachablemachine.withgoogle.com/models/-8plkUnZl/">Teachable Machine</a>.</p>
