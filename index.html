@@ -11,12 +11,25 @@
   <p id="prediction"></p>
 
   <script type="text/javascript">
+     // This script is for testing the webcam functionality
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        const video = document.getElementById('webcam');
+        video.srcObject = stream;
+        return video.play();
+      })
+      .catch(err => {
+        console.error('Error accessing the webcam:', err);
+      });
+
+    // Additional application-specific JavaScript would go here.
+    // For example, TensorFlow.js model loading and prediction logic.
     const webcamElement = document.getElementById('webcam');
     const predictionElement = document.getElementById('prediction');
 
     async function app() {
       console.log('Loading model..');
-
+ <h1>Real-Time Image Categorization</h1>
       // Replace these URLs with the actual URLs from your Teachable Machine export
       const modelURL = 'https://teachablemachine.withgoogle.com/models/-8plkUnZl/model.json';
       const metadataURL = 'https://teachablemachine.withgoogle.com/models/-8plkUnZl/metadata.json';
