@@ -1,55 +1,102 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>Image Categorization with TensorFlow.js</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image"></script>
-</head>
-<body>
-  <h1>Real-Time Image Categorization</h1>
-  <video id="webcam" autoplay playsinline width="640" height="480"></video>
-  <p id="prediction"></p>
-
+ <html >
+  <head>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"> </script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/pose@0.8/dist/teachablemachine-pose.min.js"></script>
+  <title>Teachable Paparazzi Demo</title>
+  </head>
+  <body>
+  <div>Teachable Paparazzi Model</div>
+  <button type="button" onclick="init()">Start</button>
+  <div><canvas id="canvas"></canvas></div>
+  <div id="label-container"></div>
   <script type="text/javascript">
-    const webcamElement = document.getElementById('webcam');
-    const predictionElement = document.getElementById('prediction');
+    // More API functions here:
+    // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/pose
 
-    async function app() {
-      console.log('Loading model..');
+    // the link to your model provided by Teachable Machine export panel
+    const URL = "./my_model/";
+    let model, webcam, ctx, labelContainer, maxPredictions;
 
-      // Replace these URLs with the actual URLs from your Teachable Machine export
-      const modelURL = 'https://teachablemachine.withgoogle.com/models/-8plkUnZl/model.json';
-      const metadataURL = 'https://teachablemachine.withgoogle.com/models/-8plkUnZl/metadata.json';
+    async function init() {
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
 
-      // Load the model and metadata
-      const model = await tmImage.load(modelURL, metadataURL);
-      console.log('Model loaded successfully');
+        // load the model and metadata
+        // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
+        // Note: the pose library adds a tmPose object to your window (window.tmPose)
+        model = await tmPose.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
 
-      // Setup the webcam
-      const flip = true; // flip the webcam for correct orientation
-      const webcam = new tmImage.Webcam(640, 480, flip);
-      await webcam.setup(); // request access to the webcam
-      await webcam.play();
-      document.body.appendChild(webcam.canvas);
+        // Convenience function to setup a webcam
+        const size = 200;
+        const flip = true; // whether to flip the webcam
+        webcam = new tmPose.Webcam(size, size, flip); // width, height, flip
+        await webcam.setup(); // request access to the webcam
+        await webcam.play();
+        window.requestAnimationFrame(loop);
 
-      // Loop and predict
-      async function loop() {
-        webcam.update(); // update the frame from the webcam
-        await predict();
-        requestAnimationFrame(loop); // keep looping
-      }
-
-      // Make a prediction
-      async function predict() {
-        // Predict the current frame.
-        const prediction = await model.predict(webcam.canvas);
-        predictionElement.innerText = `Prediction: ${prediction[0].className} - Probability: ${prediction[0].probability.toFixed(2)}`;
-      }
-
-      loop(); // start the loop function
+        // append/get elements to the DOM
+        const canvas = document.getElementById("canvas");
+        canvas.width = size; canvas.height = size;
+        ctx = canvas.getContext("2d");
+        labelContainer = document.getElementById("label-container");
+        for (let i = 0; i < maxPredictions; i++) { // and class labels
+            labelContainer.appendChild(document.createElement("div"));
+        }
     }
 
-    app(); // run the app function
-  </script>
+    async function loop(timestamp) {
+        webcam.update(); // update the webcam frame
+        await predict();
+        window.requestAnimationFrame(loop);
+    }
+
+    async function predict() {
+        // Prediction #1: run input through posenet
+        // estimatePose can take in an image, video or canvas html element
+        const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
+        // Prediction 2: run input through teachable machine classification model
+        const prediction = await model.predict(posenetOutput);
+
+        for (let i = 0; i < maxPredictions; i++) {
+            const classPrediction =
+            prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+            labelContainer.childNodes[i].innerHTML = classPrediction;
+            windowshow(prediction[i].probability.toFixed(2), prediction[i].className);
+        }
+
+        // finally draw the poses
+        drawPose(pose);
+    }
+
+    function drawPose(pose) {
+        if (webcam.canvas) {
+            ctx.drawImage(webcam.canvas, 0, 0);
+            // draw the keypoints and skeleton
+            if (pose) {
+                const minPartConfidence = 0.5;
+                tmPose.drawKeypoints(pose.keypoints, minPartConfidence, ctx);
+                tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx);
+            }
+        }
+    }
+
+//show the window
+    function windowshow(number, label){
+        console.log(number);
+        if (number > 0.5) {
+            console.log(label);
+            window.confirm(label);
+        }
+
+      // for (let i = 0; i < maxPredictions; i++){
+      //   	if(prediction[i].probability.toFixed(2)>0.5){
+      //   	   window.confirm('prediction[i].className');
+      //       }    
+      //   }
+    }
+</script>
 </body>
+
 </html>
