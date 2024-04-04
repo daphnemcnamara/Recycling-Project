@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Image Categorization with TensorFlow.js</title>
+  <title>Waste Classification with TensorFlow.js</title>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image"></script>
 </head>
 <body>
-  <h1>Real-Time Image Categorization</h1>
-  <video id="webcam" autoplay playsinline width="640" height="480"></video>
-  <p id="prediction"></p>
+  <h1>Waste Classification in Real-Time</h1>
+  <div id="webcam-container"></div>
+  <div id="prediction"></div>
 
   <script type="text/javascript">
-    const webcamElement = document.getElementById('webcam');
+    const webcamElement = document.getElementById('webcam-container');
     const predictionElement = document.getElementById('prediction');
 
     async function app() {
       console.log('Loading model..');
 
-      // Replace the URL below with the URL to your model.json
+      // Replace these URLs with the URLs to your model and metadata files
       const modelURL = 'https://teachablemachine.withgoogle.com/models/-8plkUnZl/model.json';
       const metadataURL = 'https://teachablemachine.withgoogle.com/models/-8plkUnZl/metadata.json';
 
@@ -25,18 +26,16 @@
       console.log('Model loaded successfully');
 
       // Setup the webcam
-      const webcam = new tmImage.Webcam(640, 480, true);
+      const flip = true; // whether to flip the webcam
+      const webcam = new tmImage.Webcam(640, 480, flip);
       await webcam.setup(); // request access to the webcam
       await webcam.play();
-      window.requestAnimationFrame(loop);
-
-      // Append the webcam element to the DOM
-      document.getElementById('webcam-container').appendChild(webcam.canvas);
+      webcamElement.appendChild(webcam.canvas);
 
       async function loop() {
         webcam.update(); // update the webcam frame
         await predict();
-        window.requestAnimationFrame(loop);
+        requestAnimationFrame(loop); // keep looping
       }
 
       // Make a prediction
@@ -44,9 +43,19 @@
         // Predict the image from webcam
         const prediction = await model.predict(webcam.canvas);
 
-        // You can adjust this to display any number of predictions
-        predictionElement.innerText = `Prediction: ${prediction[0].className}\nProbability: ${prediction[0].probability}`;
+        predictionElement.innerHTML = `
+          <ul>
+            <li>Karton: ${prediction[0].probability.toFixed(6)}</li>
+            <li>Glas: ${prediction[1].probability.toFixed(6)}</li>
+            <li>Papier: ${prediction[2].probability.toFixed(6)}</li>
+            <li>Metall: ${prediction[3].probability.toFixed(6)}</li>
+            <li>Plastik: ${prediction[4].probability.toFixed(6)}</li>
+            <li>Sondere: ${prediction[5].probability.toFixed(6)}</li>
+          </ul>
+        `;
       }
+
+      loop();
     }
 
     app();
