@@ -6,25 +6,50 @@
   <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image"></script>
 </head>
 <body>
-  <h1>Real-Time Image Categorization</h1>
+  <h1>Hello World Real-Time Image Categorization</h1>
   <video id="webcam" autoplay playsinline width="640" height="480"></video>
-  <div id="webcam-container"></div>
   <p id="prediction"></p>
 
   <script type="text/javascript">
-    // This script is for testing the webcam functionality
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then(stream => {
-        const video = document.getElementById('webcam');
-        video.srcObject = stream;
-        return video.play();
-      })
-      .catch(err => {
-        console.error('Error accessing the webcam:', err);
-      });
+    const webcamElement = document.getElementById('webcam');
+    const predictionElement = document.getElementById('prediction');
 
-    // Additional application-specific JavaScript would go here.
-    // For example, TensorFlow.js model loading and prediction logic.
+    async function app() {
+      console.log('Loading model..');
+
+      // Replace these URLs with the actual URLs from your Teachable Machine export
+      const modelURL = 'https://teachablemachine.withgoogle.com/models/YOUR_MODEL_ID/model.json';
+      const metadataURL = 'https://teachablemachine.withgoogle.com/models/YOUR_MODEL_ID/metadata.json';
+
+      // Load the model and metadata
+      const model = await tmImage.load(modelURL, metadataURL);
+      console.log('Model loaded successfully');
+
+      // Setup the webcam
+      const flip = true; // flip the webcam for correct orientation
+      const webcam = new tmImage.Webcam(640, 480, flip);
+      await webcam.setup(); // request access to the webcam
+      await webcam.play();
+      document.body.appendChild(webcam.canvas);
+
+      // Loop and predict
+      async function loop() {
+        webcam.update(); // update the frame from the webcam
+        await predict();
+        requestAnimationFrame(loop); // keep looping
+      }
+
+      // Make a prediction
+      async function predict() {
+        // Predict the current frame.
+        const prediction = await model.predict(webcam.canvas);
+        predictionElement.innerText = `Prediction: ${prediction[0].className} - Probability: ${prediction[0].probability.toFixed(2)}`;
+      }
+
+      loop(); // start the loop function
+    }
+
+    app(); // run the app function
   </script>
 </body>
 </html>
