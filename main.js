@@ -1,7 +1,7 @@
 camera = document.getElementById("webcam");
 Webcam.set({
-    width: 425,
-    height: 240,
+    width: 640,
+    height: 360,
     image_format: "png",
     png_quality: "90"
 });
