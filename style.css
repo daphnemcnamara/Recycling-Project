@@ -2,7 +2,11 @@
     font-size:30px;
 }
 body {
-background:linear-gradient(Light blue 0%,Light green 50%,Light yellow 100%)    
+background: linear-gradient(
+  #add8e6 0%, /* Light blue */
+  #c1e1c1 50%, /* Light green */
+  #ffffe0 100% /* Light yellow */
+);   
 }
 b{
     color:grey;
