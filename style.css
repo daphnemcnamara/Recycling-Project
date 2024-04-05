@@ -1,23 +1,37 @@
-.btn-default-heading{
-    font-size:30px;
+.btn-default-heading {
+    font-size: 30px;
 }
-body {
-background: linear-gradient(
-  #add8e6 0%, /* Light blue */
-  #c1e1c1 50%, /* Light green */
-  #ffffe0 100% /* Light yellow */
-);   
-}
-b{
-    color:grey;
-}
-#webcam{
-    width:640px;
-    height:aspx;
-    border:5px grey;
-    border-style:inset;
 
+body {
+    background: linear-gradient(
+        #add8e6 0%, /* Light blue */
+        #c1e1c1 50%, /* Light green */
+        #ffffe0 100% /* Light yellow */
+    );
 }
-#object_name, #accuracy_count{
-    color:white;
+
+b {
+    color: grey;
+}
+
+#webcam {
+    width: 640px;
+    height: aspx;
+    border: 5px grey;
+    border-style: inset;
+}
+
+#object_name,
+#accuracy_count {
+    color: white;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.flex-container span {
+    font-size: 24px;
 }
