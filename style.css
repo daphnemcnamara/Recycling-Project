@@ -16,8 +16,8 @@ b {
 
 #webcam {
     width: 640px;
-    height: aspx;
-    border: 5px grey;
+    height: 360px; /* Set to a specific pixel value */
+    border: 5px solid grey; /* Specify border style */
     border-style: inset;
 }
 
