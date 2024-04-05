@@ -12,36 +12,43 @@
 </head>
 <body>
 <div class="container">
-    <center>
-        <h1 class="btn btn-default-heading" style="margin-bottom: 26px;"><strong>Ein bilderkennungsgesteuertes Recycling-Trennungsprojekt von Daphne McNamara</strong></h1>
-        <br><br>
-        <img src="./Machine-Learning-Robo-next-to-black-board_w960_h609.jpg" alt="Description of the image">
-        <br><br>
-         <p style="font-size: 20px; margin-top: 24px;">Mit KI und maschinellem Lernen verbessert mein Projekt die Müllsortierung, indem es schnell verschiedene Abfalltypen erkennt und so hilft, Recycling besser und genauer zu machen: </p>
-        <br><br>
-            <div class="flex-container" style="color: red;">
-            <span style="font-size: 24px;">Karton</span>
-            <span style="font-size: 24px;">Glas</span>
-            <span style="font-size: 24px;">Papier</span>
-            <span style="font-size: 24px;">Metall</span>
-            <span style="font-size: 24px;">Plastik</span>
-           <span style="font-size: 24px;">'Sondere'</span>
-           </div>
-        <br><br>
-        <p style="font-size: 28px;">Object: <span id="object_name" style="color: red; font-weight: bold;"></span></p>
-        <p style="font-size: 28px;">Accuracy: <span id="accuracy_count" style="color: red; font-weight: bold;"></span>%</p>
-        <br><br>
-        <label>Webcam View - </label>
-        <br><br>
-        <div id="webcam"></div>
-        <br><br>
-        <div id="result"></div>
-        <br><br>
-        <button class="btn btn-primary btn-lg" onclick="snapshot()">Capture</button>
-        <br><br>
-        <button class="btn btn-success btn-lg" onclick="check()">Identify</button>
-        <br><br>
-    </center>
+    <div class="row">
+        <div class="col-md-6">
+            <center>
+                <h1 class="btn btn-default-heading" style="margin-bottom: 26px;"><strong>Ein bilderkennungsgesteuertes Recycling-Trennungsprojekt von Daphne McNamara</strong></h1>
+                <br><br>
+                <p style="font-size: 20px; margin-top: 24px;">Mit KI und maschinellem Lernen verbessert mein Projekt die Müllsortierung, indem es schnell verschiedene Abfalltypen erkennt und so hilft, Recycling besser und genauer zu machen: </p>
+                <br><br>
+                <div class="flex-container" style="color: red;">
+                    <span style="font-size: 24px;">Karton</span>
+                    <span style="font-size: 24px;">Glas</span>
+                    <span style="font-size: 24px;">Papier</span>
+                    <span style="font-size: 24px;">Metall</span>
+                    <span style="font-size: 24px;">Plastik</span>
+                    <span style="font-size: 24px;">'Sondere'</span>
+                </div>
+                <br><br>
+                <p style="font-size: 28px;">Object: <span id="object_name" style="color: red; font-weight: bold;"></span></p>
+                <p style="font-size: 28px;">Accuracy: <span id="accuracy_count" style="color: red; font-weight: bold;"></span>%</p>
+                <br><br>
+                <label>Webcam View - </label>
+                <br><br>
+                <div id="webcam"></div>
+                <br><br>
+                <div id="result"></div>
+                <br><br>
+                <button class="btn btn-primary btn-lg" onclick="snapshot()">Capture</button>
+                <br><br>
+                <button class="btn btn-success btn-lg" onclick="check()">Identify</button>
+                <br><br>
+            </center>
+        </div>
+        <div class="col-md-6">
+            <center>
+                <img src="./Machine-Learning-Robo-next-to-black-board_w960_h609.jpg" alt="Description of the image">
+            </center>
+        </div>
+    </div>
 </div>
 <script src="main.js"></script>
 </body>
