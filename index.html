@@ -42,17 +42,26 @@
                 <button class="btn btn-success btn-xl" onclick="check()">Identify</button>
                 <br><br>
             </center>
-            </div>
-                <div class="col-md-4">
-                <center>
-                    <br><br>
-                    <br><br>
-                    <br><br>
+        </div>
+        <div class="col-md-4">
+            <center>
+                <br><br>
+                <br><br>
+                <br><br>
                 <img src="./Machine-Learning-Robo-next-to-black-board_w960_h609.jpg" alt="Description of the image" width="600" height="400">
-                </center>
-             </div>
+            </center>
+        </div>
     </div>
 </div>
+<script>
+    // Assuming you have a variable named accuracyCount that holds the accuracy count value
+
+    // Append "%" symbol to the accuracy count value
+    var accuracyPercentage = accuracyCount + "%";
+
+    // Update the HTML element with the accuracy percentage
+    document.getElementById("accuracy_count").innerText = accuracyPercentage;
+</script>
 <script src="main.js"></script>
 </body>
 </html>
