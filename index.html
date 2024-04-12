@@ -1,86 +1,88 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
+    <title>Image recognition</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Recognition with ml5.js</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <script src="https://cdn.jsdelivr.net/npm/ml5@0.5.0/dist/ml5.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/ml5@0.4.3/dist/ml5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
-    <h1 class="text-center mt-5">Image Recognition with ml5.js</h1>
-    <div class="row mt-4">
-        <div class="col-md-6">
-            <h5>Webcam Feed</h5>
-            <video id="webcam" width="640" height="480" autoplay></video>
-            <button class="btn btn-primary mt-2" onclick="takeSnapshot()">Capture Image</button>
+    <div class="row">
+        <div class="col-md-8">
+            <center>
+                <h1 class="btn btn-default-heading" style="margin-bottom: 22px; font-size: 36px;"><strong>Ein bilderkennungsgesteuertes Recycling-Trennungsprojekt von Daphne McNamara</strong></h1>
+                <p style="font-size: 24px; margin-top: 20px;">Mit KI und maschinellem Lernen verbessert mein Projekt die Müllsortierung, indem es schnell verschiedene Abfalltypen erkennt und so hilft, Recycling besser und genauer zu machen </p>
+                <p style="font-size: 24px; margin-top: 20px;">6 verschiedene Abfallkategorien, auf die das Modell trainiert ist </p>
+                <div class="flex-container" style="color: red;">
+                    <span style="font-size: 25px;">Karton</span>
+                    <span style="font-size: 25px;">Glas</span>
+                    <span style="font-size: 25px;">Papier</span>
+                    <span style="font-size: 25px;">Metall</span>
+                    <span style="font-size: 25px;">Plastik</span>
+                    <span style="font-size: 25px;">'Sondere'</span>
+                </div>
+                <br><br>
+                <p style="font-size: 36px;">Objekt: <span id="object_name" style="color: red; font-weight: bold;"></span></p>
+                <p style="font-size: 36px;">Genauigkeit: <span id="accuracy_count" style="color: red; font-weight: bold;"></span></p>
+                <br>
+                <label style="font-size: 20px;">Ein Foto von Ihrem Abfall mit der 'Foto Aufnehmen' Taste machen und dann auf 'Identifizieren' drücken</label>
+                <br><br>
+                <div id="webcam"></div>
+                <br>
+                <input type="file" id="file-input" accept="image/*">
+                <button class="btn btn-info" style="font-size: 28px; padding: 10px 20px;" onclick="uploadImage()">Bild Hochladen</button>
+                <br><br>
+                <div id="result"></div>
+            </center>
         </div>
-        <div class="col-md-6">
-            <h5>Upload an Image</h5>
-            <input type="file" id="imageUpload" accept="image/*" class="form-control">
-            <button class="btn btn-info mt-2" onclick="loadUploadedFile()">Load Image</button>
-        </div>
-        <div class="col-md-12 mt-3">
-            <h5>Results</h5>
-            <p id="label" style="font-weight: bold;"></p>
-        </div>
-        <div class="col-md-12">
-            <img id="preview" src="" alt="Image Preview" style="max-width: 100%;">
+        <div class="col-md-4">
+            <img src="./Machine-Learning-Robo-next-to-black-board_w960_h609.jpg" alt="Description of the image" width="600" height="400">
+            <br><br>
+            <button class="btn btn-primary" style="font-size: 28px; padding: 10px 20px;" onclick="snapshot()">Foto Aufnehmen</button>
+            <br><br>
+            <button class="btn btn-success" style="font-size: 28px; padding: 10px 20px;" onclick="check()">Identifizieren</button>
+            <br><br>
         </div>
     </div>
 </div>
-
 <script>
-    // Initialize the Image Classifier method with MobileNet
-    const classifier = ml5.imageClassifier('MobileNet', modelLoaded);
+    Webcam.set({
+        width: 640,
+        height: 480,
+        image_format: 'jpeg',
+        jpeg_quality: 90
+    });
+    Webcam.attach('#webcam');
 
-    function modelLoaded() {
-        console.log('Model Loaded!');
-    }
-
-    // Setup the webcam
-    const webcamElement = document.getElementById('webcam');
-    navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => {
-            webcamElement.srcObject = stream;
+    function snapshot() {
+        Webcam.snap(function(data_uri) {
+            document.getElementById('result').innerHTML = '<img src="'+data_uri+'"/>';
         });
-
-    function takeSnapshot() {
-        const canvas = document.createElement('canvas');
-        canvas.width = webcamElement.videoWidth;
-        canvas.height = webcamElement.videoHeight;
-        canvas.getContext('2d').drawImage(webcamElement, 0, 0);
-        document.getElementById('preview').src = canvas.toDataURL('image/jpeg');
-        classifyImage(canvas);
     }
 
-    function loadUploadedFile() {
-        const file = document.getElementById('imageUpload').files[0];
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            document.getElementById('preview').src = e.target.result;
-            const img = new Image();
-            img.src = e.target.result;
-            img.onload = () => classifyImage(img);
-        };
-        reader.readAsDataURL(file);
-    }
-
-    function classifyImage(imageElement) {
-        classifier.classify(imageElement, (error, results) => {
-            if (error) {
-                console.error(error);
-            } else {
-                console.log(results);
-                document.getElementById('label').innerHTML = 'Label: ' + results[0].label +
-                    ' - Confidence: ' + (results[0].confidence * 100).toFixed(2) + '%';
+    function uploadImage() {
+        var input = document.getElementById('file-input');
+        var file = input.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('result').innerHTML = '<img src="'+e.target.result+'"/>';
             }
-        });
+            reader.readAsDataURL(file);
+        }
     }
+
+    // Assuming you have a variable named accuracy_count that holds the accuracy count value
+    var accuracyCountElement = document.getElementById("accuracy_count");
+    var accuracyCount = accuracyCountElement.innerText;
+    var accuracyPercentage = accuracyCount + "%"; // Append "%" symbol to the accuracy count value
+    accuracyCountElement.innerText = accuracyPercentage; // Update the HTML element with the accuracy percentage
 </script>
+<script src="main.js"></script>
 </body>
 </html>
