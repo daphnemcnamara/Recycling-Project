@@ -8,6 +8,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/ml5@0.4.3/dist/ml5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
@@ -15,34 +16,41 @@
         <div class="col-md-8">
             <center>
                 <h1 class="btn btn-default-heading" style="margin-bottom: 22px; font-size: 36px;"><strong>Ein bilderkennungsgesteuertes Recycling-Trennungsprojekt von Daphne McNamara</strong></h1>
-                <p style="font-size: 24px;">Mit KI und maschinellem Lernen verbessert mein Projekt die Müllsortierung...</p>
+                <p style="font-size: 24px; margin-top: 20px;">Mit KI und maschinellem Lernen verbessert mein Projekt die Müllsortierung, indem es schnell verschiedene Abfalltypen erkennt und so hilft, Recycling besser und genauer zu machen </p>
+                <div class="flex-container" style="color: red;">
+                    <span style="font-size: 25px;">Karton</span>
+                    <span style="font-size: 25px;">Glas</span>
+                    <span style="font-size: 25px;">Papier</span>
+                    <span style="font-size: 25px;">Metall</span>
+                    <span style="font-size: 25px;">Plastik</span>
+                    <span style="font-size: 25px;">'Sondere'</span>
+                </div>
                 <br>
                 <div id="webcam" style="width: 640px; height: 480px;"></div>
                 <br>
-                <input type="file" id="file-input" accept="image/*">
-                <button class="btn btn-info" style="font-size: 28px; padding: 10px 20px;" onclick="loadImage()">Bild Hochladen</button>
                 <button class="btn btn-primary" style="font-size: 28px; padding: 10px 20px;" onclick="takeSnapshot()">Foto Aufnehmen</button>
+                <br><br>
+                <input type="file" id="file-input" accept="image/*" onchange="previewFile()">
+                <br><br>
                 <button class="btn btn-success" style="font-size: 28px; padding: 10px 20px;" onclick="identify()">Identifizieren</button>
+                <br>
                 <div id="result"></div>
-                <p style="font-size: 36px;">Objekt: <span id="object_name"></span></p>
-                <p style="font-size: 36px;">Genauigkeit: <span id="accuracy_count"></span></p>
+                <p style="font-size: 36px;">Objekt: <span id="object_name" style="color: red; font-weight: bold;"></span></p>
+                <p style="font-size: 36px;">Genauigkeit: <span id="accuracy_count" style="color: red; font-weight: bold;"></span></p>
             </center>
         </div>
     </div>
 </div>
 <script>
-    let currentImage = null;  // This will hold the current image data URL
-    let classifier;  // This will be our classifier
+    let classifier;
+    let imageCapture;
 
-    // Load the classifier
-    ml5.imageClassifier('https://teachablemachine.withgoogle.com/models/model_URL/model.json', modelLoaded)
+    // Load the model from Teachable Machine
+    ml5.imageClassifier('https://teachablemachine.withgoogle.com/models/-8plkUnZl/model.json')
         .then(model => {
             classifier = model;
+            console.log('Model loaded!');
         });
-
-    function modelLoaded() {
-        console.log('Model loaded successfully');
-    }
 
     Webcam.set({
         width: 640,
@@ -54,31 +62,37 @@
 
     function takeSnapshot() {
         Webcam.snap(function(data_uri) {
-            currentImage = data_uri; // Store the image data URL
+            imageCapture = data_uri;
+            document.getElementById('result').innerHTML = '<img src="' + data_uri + '"/>';
         });
     }
 
-    function loadImage() {
-        var fileInput = document.getElementById('file-input');
-        var file = fileInput.files[0];
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            currentImage = e.target.result; // Store the image data URL
+    function previewFile() {
+        const file = document.getElementById('file-input').files[0];
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            imageCapture = event.target.result;
+            document.getElementById('result').innerHTML = '<img src="' + event.target.result + '"/>';
         };
-        reader.readAsDataURL(file);
+        if (file) {
+            reader.readAsDataURL(file);
+        }
     }
 
     function identify() {
-        if (currentImage && classifier) {
-            classifier.classify({image: currentImage}, function(error, results) {
-                if (error) {
-                    console.error(error);
-                } else {
-                    document.getElementById('object_name').textContent = 'Objekt: ' + results[0].label;
-                    document.getElementById('accuracy_count').textContent = 'Genauigkeit: ' + (results[0].confidence * 100).toFixed(2) + '%';
-                    document.getElementById('result').innerHTML = '<img src="' + currentImage + '"/>'; // Display the image
-                }
-            });
+        if (classifier && imageCapture) {
+            const img = new Image();
+            img.src = imageCapture;
+            img.onload = () => {
+                classifier.classify(img, (error, results) => {
+                    if (error) {
+                        console.error(error);
+                    } else {
+                        document.getElementById('object_name').innerText = results[0].label;
+                        document.getElementById('accuracy_count').innerText = (results[0].confidence * 100).toFixed(2) + '%';
+                    }
+                });
+            };
         }
     }
 </script>
