@@ -51,12 +51,14 @@
                <br><br>
                <br><br>
                <br><br>
-               <br><br>
-            <button class="btn btn-primary" style="font-size: 28px; padding: 10px 20px;" onclick="takeSnapshot()">Foto Aufnehmen</button>
+              <button class="btn btn-primary" style="font-size: 28px; padding: 10px 20px;" onclick="takeSnapshot()">Foto Aufnehmen</button>
             <br>
-              <label for="file-input" style="font-size: 24px; padding: 10px; cursor: pointer;">Hochladen</label>
-             <br><br>   
+              <input type="file" id="file-input" accept="image/*" onchange="previewFile()" style="font-size: 24px; padding: 10px;">
+              <br><br>   
              <button class="btn btn-success" style="font-size: 28px; padding: 10px 20px;" onclick="identify()">Identifizieren</button>
+             <br><br>
+             <br><br>
+             <br><br>
         </div>
     </div>
 </div>
