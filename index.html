@@ -4,18 +4,17 @@
     <title>Image recognition</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css"> <!-- Include your custom style.css file -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/ml5@0.4.3/dist/ml5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.js"></script>
-<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-md-8 text-center">
-          <center>
+        <div class="col-md-8">
+            <center>
                 <h1 class="btn btn-default-heading" style="margin-bottom: 22px; font-size: 36px;"><strong>Ein bilderkennungsgesteuertes Recycling-Trennungsprojekt von Daphne McNamara</strong></h1>
                 <br>
                 <p style="font-size: 24px; margin-top: 20px;">Mit KI und maschinellem Lernen verbessert mein Projekt die Müllsortierung, indem es schnell verschiedene Abfalltypen erkennt und so hilft, Recycling besser und genauer zu machen </p>
@@ -41,7 +40,7 @@
           </center>
         </div>
         <div class="col-md-4">
-                       </right>
+            </right>
                 <br><br>
                 <br><br>
                 <br><br>
@@ -59,6 +58,23 @@
                <br><br>
                <button class="btn btn-primary" style="font-size: 28px; padding: 10px 20px;" onclick="snapshot()">Foto Aufnehmen</button>
                <br><br>
+    function snapshot() {
+        Webcam.snap(function(data_uri) {
+            document.getElementById('result').innerHTML = '<img src="'+data_uri+'"/>';
+        });
+    }
+
+    function uploadImage() {
+        var input = document.getElementById('file-input');
+        var file = input.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('result').innerHTML = '<img src="'+e.target.result+'"/>';
+            }
+            reader.readAsDataURL(file);
+        }
+    }
                <button class="btn btn-success" style="font-size: 28px; padding: 10px 20px;" onclick="check()">Identifizieren</button>
                <br><br>
             </left>
@@ -66,58 +82,18 @@
     </div>
 </div>
 <script>
-    let classifier;
-    let imageCapture;
+    // Assuming you have a variable named accuracy_count that holds the accuracy count value
 
-    // Load the model from Teachable Machine
-    ml5.imageClassifier('https://teachablemachine.withgoogle.com/models/-8plkUnZl/model.json')
-        .then(model => {
-            classifier = model;
-            console.log('Model loaded!');
-        });
+   // Get the inner text content of the accuracy count span element
+var accuracyCountElement = document.getElementById("accuracy_count");
+var accuracyCount = accuracyCountElement.innerText;
 
-    Webcam.set({
-        width: 640,
-        height: 480,
-        image_format: 'jpeg',
-        jpeg_quality: 90
-    });
-    Webcam.attach('#webcam');
+// Append "%" symbol to the accuracy count value
+var accuracyPercentage = accuracyCount + "%";
 
-    function takeSnapshot() {
-        Webcam.snap(function(data_uri) {
-            imageCapture = data_uri;
-            document.getElementById('result').innerHTML = '<img src="' + data_uri + '" style="max-width: 100%;"/>';
-        });
-    }
-
-    function previewFile() {
-        const file = document.getElementById('file-input').files[0];
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            imageCapture = event.target.result;
-            document.getElementById('result').innerHTML = '<img src="' + event.target.result + '" style="max-width: 100%;"/>';
-        };
-        reader.readAsDataURL(file);
-    }
-
-    function identify() {
-        if (classifier && imageCapture) {
-            const img = new Image();
-            img.src = imageCapture;
-            img.onload = () => {
-                classifier.classify(img, (error, results) => {
-                    if (error) {
-                        console.error(error);
-                    } else {
-                        document.getElementById('object_name').innerText = results[0].label;
-                        document.getElementById('accuracy_count').innerText = (results[0].confidence * 100).toFixed(2) + '%';
-                        document.getElementById('result').innerHTML = '<img src="' + imageCapture + '"/>';
-                    }
-                });
-            };
-        }
-    }
+// Update the HTML element with the accuracy percentage
+accuracyCountElement.innerText = accuracyPercentage;
 </script>
+<script src="main.js"></script>
 </body>
 </html>
