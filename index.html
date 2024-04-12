@@ -116,5 +116,19 @@
         }
     }
 </script>
+ // Assuming you have a variable named accuracy_count that holds the accuracy count value
+
+ // Get the inner text content of the accuracy count span element
+var accuracyCountElement = document.getElementById("accuracy_count");
+var accuracyCount = accuracyCountElement.innerText;
+
+// Append "%" symbol to the accuracy count value
+var accuracyPercentage = accuracyCount + "%";
+
+// Update the HTML element with the accuracy percentage
+accuracyCountElement.innerText = accuracyPercentage;
+</script>
+<script src="main.js"></script>
+
 </body>
 </html>
